@@ -1,4 +1,5 @@
 import { renderTicket } from './renderTicket'
+import { reduce } from './../utils'
 
 export const renderColumn = (tasks) => (column) =>
         `

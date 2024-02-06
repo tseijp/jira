@@ -8,10 +8,10 @@ export const createHTML = (markdown: string) => {
         if (markdown.includes('<table id="jira_root">')) return markdown
 
         const tasks = { '': [] }
-        const backlog = []
-        const columns = []
+        const backlog = [] as any[]
+        const columns = [] as string[]
         let column = ''
-        let last = { detail: '' }
+        let last = { detail: '' } as any
 
         const checkColumn = (line = '') => {
                 let _column = line.split('# ')[1]
@@ -52,8 +52,9 @@ export const createHTML = (markdown: string) => {
 
 export const copyHTMLToElement = (id = '') => {
         const el = document.getElementById(id)
-        const html = createHTML(pre.innerHTML)
-        if (el) el.innerHTML = html
+        if (!el) return ''
+        const html = createHTML(el.innerHTML)
+        el.innerHTML = html
         return html
 }
 
