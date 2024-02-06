@@ -1,0 +1,16 @@
+# base
+
+**/*
+!examples**/*
+!packages**/*
+
+# whitelist
+!.gitignore
+!package.json
+!./yarn.lock
+!./README*
+
+# blacklist
+node_modules
+dist
+build

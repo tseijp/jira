@@ -1,0 +1,66 @@
+{
+        "name": "@tsei/jira",
+        "version": "0.1.0",
+        "author": "tseijp",
+        "license": "MIT",
+        "private": false,
+        "sideEffect": false,
+        "publishConfig": {
+                "access": "public"
+        },
+        "bugs": {
+                "url": "https://github.com/tseijp/jira/issues"
+        },
+        "repository": "tseijp/jira",
+        "homepage": "https://jira.tsei.jp",
+        "keywords": [
+                "jira",
+                "hooks",
+                "react",
+                "reactjs",
+                "reactive",
+                "solid",
+                "solidjs",
+                "typescript"
+        ],
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "module": "./dist/index.mjs",
+        "files": [
+                "dist/**/*",
+                "packages.json",
+                "README.md"
+        ],
+        "exports": {
+                "./packages.json": "./packages.json",
+                ".": {
+                        "types": "./dist/index.d.ts",
+                        "import": {
+                                "types": "./dist/index.d.ts",
+                                "default": "./dist/index.mjs"
+                        },
+                        "module": {
+                                "types": "./dist/index.d.ts",
+                                "default": "./dist/index.mjs"
+                        },
+                        "require": "./dist/index.js",
+                        "default": "./dist/index.js"
+                },
+                "./*": {
+                        "types": "./dist/index.d.ts",
+                        "import": {
+                                "types": "./dist/index.d.ts",
+                                "default": "./dist/index.mjs"
+                        },
+                        "module": {
+                                "types": "./dist/index.d.ts",
+                                "default": "./dist/index.mjs"
+                        },
+                        "require": "./dist/index.js",
+                        "default": "./dist/index.js"
+                }
+        },
+        "dependencies": {},
+        "peerDependencies": {},
+        "peerDependenciesMeta": {}
+}
