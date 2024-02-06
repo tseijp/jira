@@ -6,6 +6,7 @@
 
 # whitelist
 !.gitignore
+!LICENSE
 !package.json
 !./yarn.lock
 !./README*
