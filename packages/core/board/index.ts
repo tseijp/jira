@@ -59,7 +59,7 @@ export const convertTextToBoardHTML = (state: JIRABoardState) => {
                 return true
         }
 
-        const checkLine = (line: string) => {
+        const checkLine = (line = '') => {
                 if (!line) return
                 if (checkColumn(line)) return
                 if (checkTicket(line)) return
