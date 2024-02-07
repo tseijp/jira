@@ -62,9 +62,9 @@ export const create = <
                 update()
         }
 
-        const ref = (el: unknown) => {
+        const ref = (el: Element) => {
                 if (el) {
-                        onMount(el as Element)
+                        onMount(el)
                 } else onClean()
         }
 

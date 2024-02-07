@@ -17,15 +17,15 @@ export const writeClipboard = (text = '') => {
         navigator.clipboard.writeText(text)
 }
 
-export const getElement = (id: string | Element) => {
+export const getElement = (id?: string | Element) => {
         if (!id) return
-        if (typeof id === 'string') return document.getElementById(id)
-        return id
+        if (typeof id !== 'string') return id
+        return document.getElementById(id)
 }
 
 export const isS = (s: unknown): s is string => typeof s === 'string'
 
-export const isE = (e: unknown): e is Element => e instanceof Element
+export const isE = (e: unknown): e is Element => !!e && e instanceof Element
 
 export const isSE = (se: unknown): se is string | Element => isS(se) || isE(se)
 

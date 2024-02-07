@@ -3,14 +3,13 @@ export const DemoTextarea = (props: any) => {
                 <textarea
                         {...props}
                         style={{
-                                // reset css
-                                padding: 0,
+                                minWidth: '33%',
+                                padding: '16px 0px',
                                 margin: 0,
                                 border: 'none',
                                 outline: 'none',
                                 background: 'none',
                                 resize: 'none',
-                                width: '50vw',
                         }}
                 />
         )

@@ -7,6 +7,8 @@ export const DemoContainer = (props: any) => {
                                 position: 'relative',
                                 width: '100%',
                                 maxHeight: '512px',
+                                padding: '0 16px',
+                                overflow: 'scroll',
                         }}
                 />
         )
