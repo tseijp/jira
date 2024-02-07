@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { createJIRABoard } from './jira'
-import { JIRABoardConfigArgs } from './jira/types'
+import { createJIRABoard } from './board'
+import { JIRABoardConfigArgs } from './board/types'
 
 const useOnce = <T, Args extends any[] = any[]>(
         callback: (...args: Args) => T,

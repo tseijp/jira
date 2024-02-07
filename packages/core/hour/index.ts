@@ -1,17 +1,13 @@
-import { JIRAHourConfigArgs, JIRAHourState } from './types'
+import { create } from '../create'
+import { getElement, isE, parseConfig } from '../utils'
+import { JIRAHourConfig, JIRAHourConfigArgs, JIRAHourState } from './types'
+
+const DEFAULT_JIRA_HOUR_CONFIG: JIRAHourConfig = {
+        TITLE: '# *',
+        LABEL: '#*',
+}
 
 export const createHour = (...args: JIRAHourConfigArgs) => {
-        const onMount = (el: Element) => {}
-
-        const onClean = () => {}
-
-        const ref = (el: unknown) => {
-                if (el) {
-                        onMount(el as Element)
-                } else onClean()
-        }
-
-        const state = ref as unknown as JIRAHourState
-
+        const state = create(DEFAULT_JIRA_HOUR_CONFIG, ...args)
         return state
 }

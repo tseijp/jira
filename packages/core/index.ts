@@ -1,4 +1,4 @@
-import createJIRA from './jira'
+import createJIRA from './board'
 export default createJIRA
-export * from './jira'
+export * from './board'
 export * from './utils'

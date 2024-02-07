@@ -1,13 +1,10 @@
-export interface JIRABoardSharedConfig {
+export interface JIRASharedConfig {
         // for parser
         TITLE: string
         LABEL: string
-        TICKET: string
-        BACKLOG: string
-        configOverride?: object
 }
 
-export interface JIRABoardConfig extends JIRABoardSharedConfig {
+export interface JIRAConfig extends JIRASharedConfig {
         // for base config
         target?: string | Element
         button?: string | Element
@@ -15,9 +12,14 @@ export interface JIRABoardConfig extends JIRABoardSharedConfig {
         input?: string | Element
 }
 
-export interface JIRABoardState extends JIRABoardSharedConfig {
+export interface JIRAState extends JIRASharedConfig {
         // ref
         (e?: Event | Element): void
+        convert<T extends JIRAState>(state: T): void
+        markdown: string
+        results: string[]
+        result: string
+        label: string
 
         // for base coinfig
         target: Element
@@ -30,31 +32,14 @@ export interface JIRABoardState extends JIRABoardSharedConfig {
         onClean: () => void
         onClick: () => void
         onChange: (e: any) => void
-
-        // state
-        markdown: string
-        result: string
-        results: string[]
-        tickets: JIRATickets
-        backlog: JIRATicket[]
-        columns: string[]
 }
 
-export type JIRABoardConfigArgs<
+export type JIRAConfigArgs<
         S extends string | Element = string | Element,
-        T extends Partial<JIRABoardConfig> = Partial<JIRABoardConfig>
+        T extends Partial<JIRAConfig> = Partial<JIRAConfig>
 > =
         | [config?: T]
         | [target?: S, config?: T]
         | [target?: S, button?: S, config?: T]
         | [target?: S, button?: S, select?: S, config?: T]
         | [target?: S, button?: S, select?: S, input?: S, config?: T]
-
-export interface JIRATicket {
-        task?: string
-        order?: number
-        column?: string
-        detail?: string
-}
-
-export type JIRATickets<T extends string = string> = Map<T, JIRATicket[]>

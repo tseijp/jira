@@ -1,7 +1,7 @@
 import { render } from './render'
 import { JIRABoardState, JIRATicket, JIRATickets } from './types'
 
-export const convertTextToHtml = (state: JIRABoardState) => {
+export const convertTextToBoardHTML = (state: JIRABoardState) => {
         // return if already created
         const markdown = state.markdown
         if (!markdown) return state
@@ -55,9 +55,4 @@ export const convertTextToHtml = (state: JIRABoardState) => {
         markdown.trim().split('\n').forEach(checkLine)
 
         results.push((state.result = render(columns, tickets)))
-}
-
-export const convertHtmlToElement = (state: JIRABoardState) => {
-        convertTextToHtml(state)
-        if (state.target) state.target.innerHTML = state.result
 }
