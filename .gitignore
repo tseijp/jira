@@ -5,6 +5,7 @@
 !packages**/*
 
 # whitelist
+!.changeset/**/*
 !.gitignore
 !LICENSE
 !package.json

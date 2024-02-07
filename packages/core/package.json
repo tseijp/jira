@@ -58,6 +58,32 @@
                         },
                         "require": "./dist/index.js",
                         "default": "./dist/index.js"
+                },
+                "./react": {
+                        "types": "./dist/react.d.ts",
+                        "import": {
+                                "types": "./dist/react.d.ts",
+                                "default": "./dist/react.mjs"
+                        },
+                        "module": {
+                                "types": "./dist/react.d.ts",
+                                "default": "./dist/react.mjs"
+                        },
+                        "require": "./dist/react.js",
+                        "default": "./dist/react.js"
+                },
+                "./react/*": {
+                        "types": "./dist/react.d.ts",
+                        "import": {
+                                "types": "./dist/react.d.ts",
+                                "default": "./dist/react.mjs"
+                        },
+                        "module": {
+                                "types": "./dist/react.d.ts",
+                                "default": "./dist/react.mjs"
+                        },
+                        "require": "./dist/react.js",
+                        "default": "./dist/react.js"
                 }
         },
         "dependencies": {},

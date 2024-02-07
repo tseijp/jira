@@ -1,7 +1,9 @@
-export const renderTicket = ({ task, detail }) =>
-        detail
+import { JIRATicket } from '../types'
+
+export const renderTicket = ({ task, order, detail }: JIRATicket) => {
+        return detail
                 ? `
-        <table class="jira_ticket">
+        <table class="jira_ticket" id="jira_ticket_${order}">
           <tbody>
             <tr>
               <td valign="top" width="260px" height="100px">
@@ -27,3 +29,4 @@ ${task}
           </tbody>
         </table>
 `.trim()
+}

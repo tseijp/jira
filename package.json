@@ -6,8 +6,10 @@
         "private": true,
         "sideEffects": false,
         "scripts": {
+                "start": "cd examples/docs && npm run start",
+                "build": "cd examples/docs && npm run build",
+                "serve": "cd examples/docs && npm run serve",
                 "dev": "cd examples/hono && npm run dev",
-                "start": "cd examples/hono && npm run dev",
                 "deploy": "cd examples/hono && npm run deploy",
                 "watch": "cd packages/core && npx jest --watch --runInBand",
                 "cov": "cd packages/core && npx jest --coverage",

@@ -1,0 +1,60 @@
+# Board - Basic Syntax
+
+import { BoardDemo } from '@site/ui/BoardDemo'
+
+## Basic Usage
+
+<BoardDemo
+        children={`
+# Todo
+- [x] Task 1
+# In Progress
+- [x] Task 2
+# Done
+- [x] Task 3
+`}
+/>
+
+## Disable Task
+
+<BoardDemo
+        children={`
+# Todo
+- [x] Task 1
+# In Progress
+- [x] Task 2
+# Done
+- [ ] Task 3
+`}
+/>
+
+## Custom Columns
+
+<BoardDemo
+        children={`
+# Todo
+- [x] Task 1
+# In Progress
+- [x] Task 2
+# Done
+- [x] Task 3
+# Custom
+- [x] Task 4
+`}
+/>
+
+## Detail
+
+<BoardDemo
+        children={`
+# Todo
+- [x] Task 1
+  - Detail 1
+# In Progress
+- [x] Task 2
+  - Detail 2
+# Done
+- [x] Task 3
+  - Detail 3
+`}
+/>
