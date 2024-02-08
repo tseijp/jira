@@ -1,4 +1,4 @@
-import useJIRABoard from '../../../packages/core/react'
+import { useJIRAHour } from '../../../packages/core/react'
 import { DemoContainer } from './DemoContainer'
 import { DemoCopyButton } from './DemoCopyButton'
 import { DemoTarget } from './DemoTarget'
@@ -10,7 +10,7 @@ export interface HourDemoProps {
 export const HourDemo = (props: HourDemoProps) => {
         const { children } = props
 
-        const ref = useJIRABoard()
+        const ref = useJIRAHour()
 
         return (
                 <DemoContainer style={{ display: 'flex' }}>

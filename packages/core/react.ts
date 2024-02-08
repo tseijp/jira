@@ -1,6 +1,8 @@
 import { useRef } from 'react'
 import { createJIRABoard } from './board'
+import { createJIRAHour } from './hour'
 import { JIRABoardConfigArgs } from './board/types'
+import { JIRAHourConfigArgs } from './hour/types'
 
 const useOnce = <T, Args extends any[] = any[]>(
         callback: (...args: Args) => T,
@@ -12,6 +14,10 @@ const useOnce = <T, Args extends any[] = any[]>(
 
 export const useJIRABoard = (...args: JIRABoardConfigArgs) => {
         return useOnce(createJIRABoard, args)
+}
+
+export const useJIRAHour = (...args: JIRAHourConfigArgs) => {
+        return useOnce(createJIRAHour, args)
 }
 
 export default useJIRABoard
