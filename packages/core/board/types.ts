@@ -15,11 +15,13 @@ export interface JIRABoardSharedConfig extends JIRASharedConfig {
 
 export interface JIRABoardConfig extends JIRAConfig, JIRABoardSharedConfig {}
 
-export interface JIRABoardState extends JIRAState, JIRABoardSharedConfig {
+export interface JIRABoardState<Key extends string = string>
+        extends JIRAState,
+                JIRABoardSharedConfig {
         // state
         tickets: JIRATickets
         backlog: JIRATicket[]
-        columns: string[]
+        columns: Set<Key>
 }
 
 export type JIRABoardConfigArgs = JIRAConfigArgs<
@@ -35,4 +37,4 @@ export interface JIRATicket {
         detail?: string
 }
 
-export type JIRATickets<T extends string = string> = Map<T, JIRATicket[]>
+export type JIRATickets<Key extends string = string> = Map<Key, JIRATicket[]>

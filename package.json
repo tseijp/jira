@@ -13,9 +13,9 @@
                 "deploy": "cd examples/hono && npm run deploy",
                 "watch": "cd packages/core && npx jest --watch --runInBand",
                 "cov": "cd packages/core && npx jest --coverage",
-                "ls": "cd packages/core && npm publish --dry-run",
                 "tsup": "cd packages/core && yarn tsup",
                 "vers": "yarn changeset version",
+                "ls": "cd packages/core && npm publish --dry-run",
                 "pub": "yarn tsup && yarn changeset publish"
         },
         "dependencies": {},

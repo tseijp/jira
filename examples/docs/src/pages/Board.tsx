@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import useJIRABoard from '../../../../packages/core/react'
 
 const markdown = `
@@ -26,7 +25,7 @@ const markdown = `
 - [x] Create a new feature
 `
 
-export const App = () => {
+export const Board = () => {
         const jira = useJIRABoard()
         // const jira = useJIRABoard({ button: 'button' })
 
@@ -45,4 +44,4 @@ export const App = () => {
         )
 }
 
-export default App
+export default Board

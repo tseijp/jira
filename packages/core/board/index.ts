@@ -25,19 +25,21 @@ export const convertTextToBoardHTML = (state: JIRABoardState) => {
 
         const tickets = (state.tickets = new Map([['', {}]]) as JIRATickets)
         const backlog = (state.backlog = [] as JIRATicket[])
-        const columns = (state.columns = [] as string[])
+        const columns = (state.columns = new Set())
         const results = state.results ?? (state.results = [] as string[])
 
         let column = ''
         let order = 0
         let last = { detail: '' } as JIRATicket
 
-        const checkColumn = (line = '') => {
-                let _column = line.split('# ')[1]
+        const checkTitle = (line = '') => {
+                const _column = line.split('# ')[1]
                 if (!_column) return false
-                column = _column = _column.trim()
-                tickets.set(_column, [])
-                columns.push(column)
+                if (columns.has(_column))
+                        console.warn(`Error: Duplicate column: ${_column}`)
+                column = _column.trim()
+                tickets.set(column, [])
+                columns.add(column)
                 return true
         }
 
@@ -61,7 +63,7 @@ export const convertTextToBoardHTML = (state: JIRABoardState) => {
 
         const checkLine = (line = '') => {
                 if (!line) return
-                if (checkColumn(line)) return
+                if (checkTitle(line)) return
                 if (checkTicket(line)) return
                 if (checkBacklog(line)) return
                 if (last.detail) last.detail += ' <br />\n'
@@ -70,7 +72,10 @@ export const convertTextToBoardHTML = (state: JIRABoardState) => {
 
         markdown.trim().split('\n').forEach(checkLine)
 
-        results.push((state.result = render(columns, tickets)))
+        const _columns = Array.from(columns)
+
+        // render
+        results.push((state.result = render(_columns, tickets)))
 }
 
 export const createJIRABoard = (...args: JIRABoardConfigArgs) => {

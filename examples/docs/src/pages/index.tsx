@@ -3,8 +3,8 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import Layout from '@theme/Layout'
 // import Heading from '@theme/Heading'
 // import styles from './index.module.css'
-import App from './App'
-import App2 from './App2'
+import Board from './Board'
+import Hour from './Hour'
 
 export default function Home(): JSX.Element {
         const { siteConfig } = useDocusaurusContext()
@@ -14,8 +14,8 @@ export default function Home(): JSX.Element {
                         description="Description will go into a meta tag in <head />"
                 >
                         <main>
-                                <App />
-                                <App2 />
+                                <Board />
+                                <Hour />
                         </main>
                 </Layout>
         )

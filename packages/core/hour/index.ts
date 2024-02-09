@@ -6,7 +6,6 @@ import {
         JIRAHourState,
         JIRAHours,
         JIRAHour,
-        JIRADateHour,
 } from './types'
 
 const reg = (line = '', from = '', to = '') => {
@@ -25,14 +24,15 @@ const DEFAULT_JIRA_HOUR_CONFIG: JIRAHourConfig = {
 }
 
 const calculateDuration = (from: string, to: string) => {
-        const [h0, M0] = from.split(':').map(Number)
-        const [h1, m1] = to.split(':').map(Number)
-        return h1 * 60 + m1 - (h0 * 60 + M0)
+        const [h, m] = from.split(':').map(Number)
+        const [H, M] = to.split(':').map(Number)
+        return H * 60 + M - (h * 60 + m)
 }
 
-const calculateRest = (d?: JIRADateHour) => {
+const calculateRest = (column: string, hours: JIRAHours) => {
+        let d = hours.get(column)
         if (!d || d.length === 0) return 0
-        d = d.sort((a, b) => (a.from! < b.from! ? -1 : 1))
+        d.sort((a, b) => (a.from! < b.from! ? -1 : 1))
         d.first = d[0]
         d.last = d[d.length - 1]
         d.duration = calculateDuration(d.first.from!, d.last.to!)
@@ -42,9 +42,9 @@ const calculateRest = (d?: JIRADateHour) => {
 
 export const convertTextToHourHtml = (state: JIRAHourState) => {
         const markdown = state.markdown
-        const hours = (state.hours = new Map() as JIRAHours)
-        const columns = (state.columns = [] as string[])
-        const results = state.results ?? (state.results = [] as string[])
+        const hours = (state.hours = new Map())
+        const columns = (state.columns = new Set())
+        const results = state.results ?? (state.results = [])
 
         let column = ''
         let last = { detail: '' } as JIRAHour
@@ -53,12 +53,14 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
         const checkDate = (line = '') => {
                 const match = reg(line, state.DATE, state.dateReg)
                 if (!match) return false
-                if (column) calculateRest(hours.get(column))
 
-                const [_, _column] = match
-                column = _column
+                column = match[1]
+
+                if (columns.has(column))
+                        console.warn(`Error: Duplicate column: ${column}`)
+
                 hours.set(column, [])
-                columns.push(column)
+                columns.add(column)
                 return true
         }
 
@@ -81,9 +83,14 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
 
         markdown.trim().split('\n').forEach(checkLine)
 
-        if (column) calculateRest(hours.get(column))
+        let _columns = Array.from(columns)
 
-        results.push((state.result = render(columns, hours)))
+        _columns = _columns.filter((col) => hours.get(col)?.length) // remove empty columns
+        _columns = _columns.sort((a, b) => (a < b ? -1 : 1)) // sort columns by date
+        _columns.forEach((col) => calculateRest(col, hours)) // calculate duration and rest
+
+        // render
+        results.push((state.result = render(_columns, hours)))
 
         return state
 }

@@ -14,9 +14,11 @@ export interface JIRABoardSharedConfig {
 
 export interface JIRAHourConfig extends JIRAConfig, JIRABoardSharedConfig {}
 
-export interface JIRAHourState extends JIRAState, JIRABoardSharedConfig {
+export interface JIRAHourState<Key extends string = string>
+        extends JIRAState,
+                JIRABoardSharedConfig {
         hours: JIRAHours
-        columns: string[]
+        columns: Set<Key>
 }
 
 export type JIRAHourConfigArgs = JIRAConfigArgs<
@@ -43,4 +45,4 @@ export type JIRADateHour = JIRAHour[] & {
         rest?: number
 }
 
-export type JIRAHours<T extends string = string> = Map<T, JIRADateHour>
+export type JIRAHours<Key extends string = string> = Map<Key, JIRADateHour>

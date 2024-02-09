@@ -4,7 +4,7 @@ const markdown = [...Array(31)].reduce(
         (acc, _, i) =>
                 acc +
                 `
-# 2024-01-0${i}
+# 2024-01-${i < 9 ? '0' : ''}${i + 1}
 
 - [${i % 2 ? 'x' : ' '}] 09:00 ~ 12:00 #a mtg
 - [${i % 3 ? 'x' : ' '}] 12:00 ~ 15:00 #b mtg
@@ -12,7 +12,8 @@ const markdown = [...Array(31)].reduce(
 - [${i % 11 ? 'x' : ' '}] 18:00 ~ 21:00 #d mtg
 `
 )
-export const App = () => {
+
+export const Hour = () => {
         const jira = useJIRAHour()
 
         // prettier-ignore
@@ -30,4 +31,4 @@ export const App = () => {
         )
 }
 
-export default App
+export default Hour
