@@ -1,70 +1,76 @@
 import { create } from '../create'
+import { render } from './render'
 import {
         JIRAHourConfig,
         JIRAHourConfigArgs,
         JIRAHourState,
         JIRAHours,
         JIRAHour,
+        JIRADateHour,
 } from './types'
+
+const reg = (line = '', from = '', to = '') => {
+        const regex = new RegExp(from.replace('*', to))
+        return line.match(regex)
+}
+const t = '(\\d{1,2}:\\d{1,2})'
 
 const DEFAULT_JIRA_HOUR_CONFIG: JIRAHourConfig = {
         DATE: '# *',
         HOUR: '- [x] *',
         TITLE: '# ', // nouse
         LABEL: '#', // nouse
-}
-const calculateDuration = (from: string, to: string) => {
-        const [fromHour, fromMinute] = from.split(':').map(Number)
-        const [toHour, toMinute] = to.split(':').map(Number)
-        return toHour + toMinute / 60 - (fromHour + fromMinute / 60)
+        dateReg: `(\\d{4}-\\d{2}-\\d{2})`,
+        hourReg: `${t} ~ ${t}(?: #\\S+)?(?: .+)?|\\[x\\] ${t} ~ ${t}(?: (.*?))?(?: (#[^\\s]+))?`,
 }
 
-const calculateRest = (hours: JIRAHour[] | undefined, from: string) => {
-        if (!hours || hours.length === 0) return 0
-        const lastHour = hours[hours.length - 1]
-        const [lastToHour, lastToMinute] = lastHour.to
-                ?.split(':')
-                .map(Number) || [0, 0]
-        const [fromHour, fromMinute] = from.split(':').map(Number)
-        return fromHour + fromMinute / 60 - (lastToHour + lastToMinute / 60)
+const calculateDuration = (from: string, to: string) => {
+        const [h0, M0] = from.split(':').map(Number)
+        const [h1, m1] = to.split(':').map(Number)
+        return h1 * 60 + m1 - (h0 * 60 + M0)
+}
+
+const calculateRest = (d?: JIRADateHour) => {
+        if (!d || d.length === 0) return 0
+        d = d.sort((a, b) => (a.from! < b.from! ? -1 : 1))
+        d.first = d[0]
+        d.last = d[d.length - 1]
+        d.duration = calculateDuration(d.first.from!, d.last.to!)
+        d.total = d.reduce((acc, cur) => acc + (cur.duration || 0), 0)
+        d.rest = d.duration - d.total
 }
 
 export const convertTextToHourHtml = (state: JIRAHourState) => {
         const markdown = state.markdown
-        const hours = (state.hours = new Map([['', {}]]) as JIRAHours)
+        const hours = (state.hours = new Map() as JIRAHours)
         const columns = (state.columns = [] as string[])
-        const _results = state.results ?? (state.results = [] as string[])
+        const results = state.results ?? (state.results = [] as string[])
 
         let column = ''
         let last = { detail: '' } as JIRAHour
+        hours.set(column, [])
 
         const checkDate = (line = '') => {
-                const _ = '(\\d{4}-\\d{2}-\\d{2})'
-                const dateRegex = new RegExp(state.DATE.replace('*', _))
-                const match = line.match(dateRegex)
-                if (match) {
-                        column = match[1]
-                        hours.set(column, [])
-                        columns.push(column)
-                        return true
-                }
-                return false
+                const match = reg(line, state.DATE, state.dateReg)
+                if (!match) return false
+                if (column) calculateRest(hours.get(column))
+
+                const [_, _column] = match
+                column = _column
+                hours.set(column, [])
+                columns.push(column)
+                return true
         }
 
         const checkHour = (line = '') => {
-                const reg = '(\\d{2}:\\d{2}) ~ (\\d{2}:\\d{2}) #(\\S+) (.+)'
-                const hourRegex = new RegExp(state.HOUR.replace('*', reg))
-                const match = line.match(hourRegex)
-                if (match) {
-                        const [_, from, to, label, task] = match
-                        const duration = calculateDuration(from, to)
-                        const rest = calculateRest(hours.get(column), from)
-                        const time = duration - rest
-                        last = { from, to, rest, time, task, label, detail: '' }
-                        hours.get(column)?.push(last)
-                        return true
-                }
-                return false
+                const match = reg(line, state.HOUR, state.hourReg)
+                if (!match) return false
+
+                const [, , , from, to] = match
+                const duration = calculateDuration(from, to)
+                last = { from, to, duration, detail: '' }
+                hours.get(column)?.push(last)
+                return true
         }
 
         const checkLine = (line = '') => {
@@ -73,11 +79,11 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
                 if (checkHour(line)) return
         }
 
-        console.log({ ...state })
-
         markdown.trim().split('\n').forEach(checkLine)
 
-        // results.push((state.result = render(columns, hours)))
+        if (column) calculateRest(hours.get(column))
+
+        results.push((state.result = render(columns, hours)))
 
         return state
 }

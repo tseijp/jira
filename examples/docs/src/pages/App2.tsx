@@ -1,42 +1,31 @@
-import { useEffect } from 'react'
-import useJIRABoard from '../../../../packages/core/react'
+import { useJIRAHour } from '../../../../packages/core/react'
 
-const markdown = `
-# 2021-08-02
-- [x] 12:00 ~ 15:00 #a mtg
-- [x] 15:00 ~ 17:00 #b mtg
-- [x] 17:00 ~ 18:00 #c mtg
+const markdown = [...Array(31)].reduce(
+        (acc, _, i) =>
+                acc +
+                `
+# 2024-01-0${i}
 
-# 2021-08-01
-
-- [x] 12:00 ~ 15:00 #a mtg
-- [x] 15:00 ~ 17:00 #b mtg
-- [x] 17:00 ~ 18:00 #c mtg
-
-# 2021-07-31
-
-- [x] 12:00 ~ 15:00 #a mtg
-- [x] 15:00 ~ 17:00 #b mtg
-- [x] 17:00 ~ 18:00 #c mtg
-
-# 2021-07-30
-
-- [x] 12:00 ~ 15:00 #a mtg
-- [x] 15:00 ~ 17:00 #b mtg
-- [x] 17:00 ~ 18:00 #c mtg
+- [${i % 2 ? 'x' : ' '}] 09:00 ~ 12:00 #a mtg
+- [${i % 3 ? 'x' : ' '}] 12:00 ~ 15:00 #b mtg
+- [${i % 7 ? 'x' : ' '}] 15:00 ~ 18:00 #c mtg
+- [${i % 11 ? 'x' : ' '}] 18:00 ~ 21:00 #d mtg
 `
+)
 export const App = () => {
-        // const jira = useJIRABoard({ button: 'button' })
+        const jira = useJIRAHour()
 
-        const jira = useJIRABoard('', 'button')
-        useEffect(jira.onMount, [])
         // prettier-ignore
         return (
                 <>
+                        <pre ref={jira} id="pre">
+                                {markdown}
+                        </pre>
                         <div>
-                                <button id="button">COPY</button>
+                                <button id="button" onClick={jira.onClick}>
+                                        COPY
+                                </button>
                         </div>
-                        <pre ref={jira} id="pre">{markdown}</pre>
                 </>
         )
 }

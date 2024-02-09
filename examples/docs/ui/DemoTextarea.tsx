@@ -3,8 +3,8 @@ export const DemoTextarea = (props: any) => {
                 <textarea
                         {...props}
                         style={{
-                                minWidth: '33%',
-                                padding: '16px 0px',
+                                minWidth: '38%',
+                                padding: '32px 0px 0px 0px',
                                 margin: 0,
                                 border: 'none',
                                 outline: 'none',

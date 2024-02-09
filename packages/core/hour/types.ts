@@ -8,6 +8,8 @@ import {
 export interface JIRABoardSharedConfig {
         DATE: string
         HOUR: string
+        dateReg: string
+        hourReg: string
 }
 
 export interface JIRAHourConfig extends JIRAConfig, JIRABoardSharedConfig {}
@@ -25,11 +27,20 @@ export type JIRAHourConfigArgs = JIRAConfigArgs<
 export interface JIRAHour {
         from?: string
         to?: string
-        time?: number
-        rest?: number
         task?: string
         label?: string
         detail?: string
+        // calculated
+        duration?: number
 }
 
-export type JIRAHours<T extends string = string> = Map<T, JiraHour[]>
+export type JIRADateHour = JIRAHour[] & {
+        first?: JIRAHour
+        last?: JIRAHour
+        // calculated
+        duration?: number
+        total?: number
+        rest?: number
+}
+
+export type JIRAHours<T extends string = string> = Map<T, JIRADateHour>

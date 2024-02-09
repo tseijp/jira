@@ -27,16 +27,20 @@ const markdown = `
 `
 
 export const App = () => {
-        const jira = useJIRABoard('', 'button')
+        const jira = useJIRABoard()
         // const jira = useJIRABoard({ button: 'button' })
 
         // prettier-ignore
         return (
                 <>
+                        <pre ref={jira} id="pre">
+                                {markdown}
+                        </pre>
                         <div>
-                                <button id="button">COPY</button>
+                                <button id="button" onClick={jira.onClick}>
+                                        COPY
+                                </button>
                         </div>
-                        <pre ref={jira} id="pre">{markdown}</pre>
                 </>
         )
 }

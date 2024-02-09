@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic'
 
 const config: Config = {
         title: 'jira',
-        tagline: 'jira are cool',
+        tagline: '🪧jira are cool',
         favicon: 'img/favicon.ico',
 
         url: 'https://jira.tsei.jp',
@@ -46,12 +46,12 @@ const config: Config = {
 
         themeConfig: {
                 // Replace with your project's social card
-                // image: 'img/docusaurus-social-card.jpg',
+                image: 'img/favicon.png',
                 navbar: {
                         title: '@tsei/jira',
                         logo: {
                                 alt: ' ',
-                                src: 'logo.svg',
+                                src: 'img/favicon.png',
                         },
                         items: [
                                 {
