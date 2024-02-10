@@ -2,6 +2,8 @@ export interface JIRASharedConfig {
         // for parser
         TITLE: string
         LABEL: string
+        title: string
+        label: string
 }
 
 export interface JIRAConfig extends JIRASharedConfig {
@@ -19,7 +21,6 @@ export interface JIRAState extends JIRASharedConfig {
         markdown: string
         results: string[]
         result: string
-        label: string
 
         // for base coinfig
         target: Element
@@ -31,6 +32,7 @@ export interface JIRAState extends JIRASharedConfig {
         onMount: (el?: Element) => void
         onClean: () => void
         onClick: () => void
+        onSelect: (e: any) => void
         onChange: (e: any) => void
 }
 

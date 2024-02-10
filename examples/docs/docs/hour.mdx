@@ -12,6 +12,23 @@ import { HourDemo } from '@site/ui/HourDemo'
 - [x] 17:00 ~ 20:00
 - [x] 21:00 ~ 24:00
 # 2024-01-02
+- [x] 09:00 ~ 12:00
+- [x] 13:00 ~ 16:00
+- [x] 17:00 ~ 20:00
+- [x] 21:00 ~ 24:00
+`.trim()}
+/>
+
+# Disable hours
+
+<HourDemo
+        children={`
+# 2024-01-01
+- [x] 09:00 ~ 12:00
+- [x] 13:00 ~ 16:00
+- [x] 17:00 ~ 20:00
+- [x] 21:00 ~ 24:00
+# 2024-01-02
 - [ ] 09:00 ~ 12:00
 - [x] 13:00 ~ 16:00
 - [x] 17:00 ~ 20:00
@@ -36,9 +53,10 @@ import { HourDemo } from '@site/ui/HourDemo'
 `.trim()}
 />
 
-# With label
+## With label
 
 <HourDemo
+        labels={['a', 'b']}
         children={`
 # 2024-01-01
 - [x] 09:00 ~ 12:00 #a Task 1

@@ -6,7 +6,7 @@ import { create } from '../create'
 export * from './render'
 export * from './types'
 
-const DEFAULT_JIRA_BOARD_CONFIG: JIRABoardConfig = {
+const DEFAULT_JIRA_BOARD_CONFIG: Partial<JIRABoardConfig> = {
         TITLE: '# ',
         LABEL: '#',
         TICKET: '- [x]',
@@ -28,7 +28,7 @@ export const convertTextToBoardHTML = (state: JIRABoardState) => {
         const columns = (state.columns = new Set())
         const results = state.results ?? (state.results = [] as string[])
 
-        let column = ''
+        let column = state.title
         let order = 0
         let last = { detail: '' } as JIRATicket
 

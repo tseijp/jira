@@ -32,38 +32,38 @@ import { BoardDemo } from '@site/ui/BoardDemo'
 `.trim()}
 />
 
-## Custom Columns
+## With labels
 
 <BoardDemo
+        labels={['a', 'b']}
         children={`
 # Todo
-- [x] Task 0
+- [x] Task 0 #a
 # In Progress
-- [x] Task 1
-# Done
-- [x] Task 2
+- [x] Task 1 #b
 # Review
-- [x] Task 3
-# Custom
-- [x] Task 4
+- [x] Task 2 #a
+# Done
+- [ ] Task 3 #b
 `.trim()}
 />
 
-## Detail
+## With details
 
 <BoardDemo
+        labels={['a', 'b']}
         children={`
 # Todo
-- [x] Task 0
+- [x] Task 0 #a
   - Detail 0
 # In Progress
-- [x] Task 1
+- [x] Task 1 #b
   - Detail 1
 # Review
-- [x] Task 2
+- [x] Task 2 #a
   - Detail 2
 # Done
-- [x] Task 3
+- [x] Task 3 #b
   - Detail 3
 `.trim()}
 />

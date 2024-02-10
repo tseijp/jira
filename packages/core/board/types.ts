@@ -7,8 +7,6 @@ import {
 
 export interface JIRABoardSharedConfig extends JIRASharedConfig {
         // for parser
-        TITLE: string
-        LABEL: string
         TICKET: string
         BACKLOG: string
 }

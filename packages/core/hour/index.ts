@@ -8,19 +8,19 @@ import {
         JIRAHour,
 } from './types'
 
-const reg = (line = '', from = '', to = '') => {
-        const regex = new RegExp(from.replace('*', to))
-        return line.match(regex)
+const reg = (from = '', to = '') => {
+        to = from.replace('*', to)
+        return new RegExp(to)
 }
 const t = '(\\d{1,2}:\\d{1,2})'
 
-const DEFAULT_JIRA_HOUR_CONFIG: JIRAHourConfig = {
+const DEFAULT_JIRA_HOUR_CONFIG: Partial<JIRAHourConfig> = {
         DATE: '# *',
-        HOUR: '- [x] *',
-        TITLE: '# ', // nouse
-        LABEL: '#', // nouse
+        HOUR: '- \\[x\\]*',
+        LABEL: '#*',
         dateReg: `(\\d{4}-\\d{2}-\\d{2})`,
-        hourReg: `${t} ~ ${t}(?: #\\S+)?(?: .+)?|\\[x\\] ${t} ~ ${t}(?: (.*?))?(?: (#[^\\s]+))?`,
+        hourReg: `\\s*${t}\\s*~\\s*${t}\\s*`,
+        labelReg: `\\s*(\\S+)`, // not working
 }
 
 const calculateDuration = (from: string, to: string) => {
@@ -50,8 +50,12 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
         let last = { detail: '' } as JIRAHour
         hours.set(column, [])
 
+        const _date = reg(state.DATE, state.dateReg)
+        const _hour = reg(state.HOUR, state.hourReg)
+        const _label = reg(state.LABEL, state.labelReg)
+
         const checkDate = (line = '') => {
-                const match = reg(line, state.DATE, state.dateReg)
+                const match = line.match(_date)
                 if (!match) return false
 
                 column = match[1]
@@ -65,20 +69,35 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
         }
 
         const checkHour = (line = '') => {
-                const match = reg(line, state.HOUR, state.hourReg)
+                const match = line.match(_hour)
                 if (!match) return false
 
-                const [, , , from, to] = match
+                const [, from, to] = match
                 const duration = calculateDuration(from, to)
                 last = { from, to, duration, detail: '' }
+
+                if (checkLabel(line)) return true
+
                 hours.get(column)?.push(last)
+                return true
+        }
+
+        const checkLabel = (line = '') => {
+                const match = line.match(_label)
+                if (!match) return false
+
+                const [, label] = match
+                last.label = label
+
+                if (state.label && state.label !== label) return false
+
                 return true
         }
 
         const checkLine = (line = '') => {
                 if (!line) return
                 if (checkDate(line)) return
-                if (checkHour(line)) return
+                if (checkHour(line)) checkLabel(line)
         }
 
         markdown.trim().split('\n').forEach(checkLine)

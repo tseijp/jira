@@ -6,7 +6,7 @@ export const create = <
         C extends JIRAConfig = JIRAConfig,
         Arg extends C[keyof C] | Partial<C> = C[keyof C] | Partial<C>
 >(
-        defaultConfig: C,
+        defaultConfig: Partial<C>,
         ...args: Arg[]
 ) => {
         const update = () => {
@@ -79,6 +79,7 @@ export const create = <
                 onClean,
                 onClick,
                 onChange,
+                onSelect,
                 convert: () => {}, // abstract method
         })
 

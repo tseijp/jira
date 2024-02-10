@@ -5,11 +5,12 @@ import {
         JIRAConfigArgs,
 } from './../types'
 
-export interface JIRABoardSharedConfig {
+export interface JIRABoardSharedConfig extends JIRASharedConfig {
         DATE: string
         HOUR: string
         dateReg: string
         hourReg: string
+        labelReg: string
 }
 
 export interface JIRAHourConfig extends JIRAConfig, JIRABoardSharedConfig {}

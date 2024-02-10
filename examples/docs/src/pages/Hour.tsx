@@ -1,17 +1,20 @@
 import { useJIRAHour } from '../../../../packages/core/react'
 
-const markdown = [...Array(31)].reduce(
-        (acc, _, i) =>
+const SIZE_OF_DAY = 31
+
+const markdown = [...Array(SIZE_OF_DAY)].reduce((acc, _, i) => {
+        return (
                 acc +
                 `
 # 2024-01-${i < 9 ? '0' : ''}${i + 1}
 
 - [${i % 2 ? 'x' : ' '}] 09:00 ~ 12:00 #a mtg
-- [${i % 3 ? 'x' : ' '}] 12:00 ~ 15:00 #b mtg
-- [${i % 7 ? 'x' : ' '}] 15:00 ~ 18:00 #c mtg
-- [${i % 11 ? 'x' : ' '}] 18:00 ~ 21:00 #d mtg
+- [${i % 3 ? 'x' : ' '}] 12:00 ~ 15:00
+- [${i % 7 ? 'x' : ' '}] 15:00 ~ 18:00
+- [${i % 2 ? ' ' : 'x'}] 18:00 ~ 21:00 mtg #d
 `
-)
+        )
+}, '')
 
 export const Hour = () => {
         const jira = useJIRAHour()
