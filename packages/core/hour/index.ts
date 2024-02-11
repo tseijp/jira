@@ -101,7 +101,7 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
         const checkLine = (line = '') => {
                 if (!line) return
                 if (checkDate(line)) return
-                if (checkHour(line)) checkLabel(line)
+                if (checkHour(line)) return
         }
 
         markdown.trim().split('\n').forEach(checkLine)
