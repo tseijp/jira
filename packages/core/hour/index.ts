@@ -4,7 +4,6 @@ import {
         JIRAHourConfig,
         JIRAHourConfigArgs,
         JIRAHourState,
-        JIRAHours,
         JIRAHour,
 } from './types'
 
@@ -20,7 +19,7 @@ const DEFAULT_JIRA_HOUR_CONFIG: Partial<JIRAHourConfig> = {
         LABEL: '#*',
         dateReg: `(\\d{4}-\\d{2}-\\d{2})`,
         hourReg: `\\s*${t}\\s*~\\s*${t}\\s*`,
-        labelReg: `\\s*(\\S+)`, // not working
+        labelReg: `\\s*(\\S+)`,
 }
 
 const calculateDuration = (from: string, to: string) => {
@@ -29,14 +28,19 @@ const calculateDuration = (from: string, to: string) => {
         return H * 60 + M - (h * 60 + m)
 }
 
-const calculateRest = (column: string, hours: JIRAHours) => {
-        let d = hours.get(column)
-        if (!d || d.length === 0) return 0
-        d.sort((a, b) => (a.from! < b.from! ? -1 : 1))
-        d.first = d[0]
-        d.last = d[d.length - 1]
+const calculateRest = (column: string, state: JIRAHourState) => {
+        const d = state.hours.get(column)
+        if (!d) return
+        const _d = d.filter((d) => !d.disable)
+        if (_d.length <= 0) return
+
+        _d.sort((a, b) => (a.from! < b.from! ? -1 : 1))
+
+        d.first = _d[0]
+        d.last = _d[_d.length - 1]
+        d.size = _d.length
         d.duration = calculateDuration(d.first.from!, d.last.to!)
-        d.total = d.reduce((acc, cur) => acc + (cur.duration || 0), 0)
+        d.total = _d.reduce((acc, cur) => acc + (cur.duration || 0), 0)
         d.rest = d.duration - d.total
 }
 
@@ -46,7 +50,7 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
         const columns = (state.columns = new Set())
         const results = state.results ?? (state.results = [])
 
-        let column = ''
+        let column = state.title || ''
         let last = { detail: '' } as JIRAHour
         hours.set(column, [])
 
@@ -76,20 +80,20 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
                 const duration = calculateDuration(from, to)
                 last = { from, to, duration, detail: '' }
 
-                if (checkLabel(line)) return true
-
                 hours.get(column)?.push(last)
+
                 return true
         }
 
         const checkLabel = (line = '') => {
+                if (!state.label) return false
                 const match = line.match(_label)
                 if (!match) return false
 
                 const [, label] = match
                 last.label = label
 
-                if (state.label && state.label !== label) return false
+                if (label !== state.label) last.disable = true
 
                 return true
         }
@@ -104,12 +108,12 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
 
         let _columns = Array.from(columns)
 
-        _columns = _columns.filter((col) => hours.get(col)?.length) // remove empty columns
+        _columns.forEach((col) => calculateRest(col, state)) // calculate duration and rest
         _columns = _columns.sort((a, b) => (a < b ? -1 : 1)) // sort columns by date
-        _columns.forEach((col) => calculateRest(col, hours)) // calculate duration and rest
+        _columns = _columns.filter((col) => hours.get(col)?.size) // remove empty columns
 
         // render
-        results.push((state.result = render(_columns, hours)))
+        results.push((state.result = render(_columns, state)))
 
         return state
 }

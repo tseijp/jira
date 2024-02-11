@@ -1,8 +1,7 @@
-import { reduce } from '../../utils'
-import { JIRAHours } from '../types'
+import { JIRAHourState } from '../types'
 
-export const renderColumn = (hours: JIRAHours) => (column: string) => {
-        const d = hours.get(column)
+export const renderColumn = (state: JIRAHourState) => (column: string) => {
+        const d = state.hours.get(column)
         if (!d) return ''
 
         return `

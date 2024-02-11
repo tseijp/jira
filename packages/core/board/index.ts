@@ -8,7 +8,7 @@ export * from './types'
 
 const DEFAULT_JIRA_BOARD_CONFIG: Partial<JIRABoardConfig> = {
         TITLE: '# ',
-        LABEL: '#',
+        LABEL: `#\\s*(\\S+)`,
         TICKET: '- [x]',
         BACKLOG: '- [ ]',
         // title: '# *',
@@ -28,9 +28,10 @@ export const convertTextToBoardHTML = (state: JIRABoardState) => {
         const columns = (state.columns = new Set())
         const results = state.results ?? (state.results = [] as string[])
 
-        let column = state.title
+        let column = state.title || ''
         let order = 0
         let last = { detail: '' } as JIRATicket
+        const _label = new RegExp(state.LABEL)
 
         const checkTitle = (line = '') => {
                 const _column = line.split('# ')[1]
@@ -52,6 +53,18 @@ export const convertTextToBoardHTML = (state: JIRABoardState) => {
                 return true
         }
 
+        const checkLabel = (line = '') => {
+                if (!state.label) return false
+                const match = line.match(_label)
+                if (!match) return false
+
+                const [, label] = match
+                last.label = label
+                if (label !== state.label) last.disable = true
+
+                return true
+        }
+
         const checkBacklog = (line = '') => {
                 if (!line.includes(state.BACKLOG)) return false
                 const task = line.split(state.BACKLOG)[1].trim()
@@ -64,15 +77,15 @@ export const convertTextToBoardHTML = (state: JIRABoardState) => {
         const checkLine = (line = '') => {
                 if (!line) return
                 if (checkTitle(line)) return
-                if (checkTicket(line)) return
-                if (checkBacklog(line)) return
+                if (checkTicket(line)) return checkLabel(line)
+                if (checkBacklog(line)) return checkLabel(line)
                 if (last.detail) last.detail += ' <br />\n'
                 last.detail += line
         }
 
         markdown.trim().split('\n').forEach(checkLine)
 
-        const _columns = Array.from(columns)
+        let _columns = Array.from(columns)
 
         // render
         results.push((state.result = render(_columns, tickets)))

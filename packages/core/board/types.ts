@@ -9,6 +9,7 @@ export interface JIRABoardSharedConfig extends JIRASharedConfig {
         // for parser
         TICKET: string
         BACKLOG: string
+        labelReg: string
 }
 
 export interface JIRABoardConfig extends JIRAConfig, JIRABoardSharedConfig {}
@@ -33,6 +34,7 @@ export interface JIRATicket {
         order?: number
         column?: string
         detail?: string
+        disable?: boolean
 }
 
 export type JIRATickets<Key extends string = string> = Map<Key, JIRATicket[]>

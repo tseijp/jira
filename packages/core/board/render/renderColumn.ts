@@ -3,7 +3,8 @@ import { reduce } from '../../utils'
 import { JIRATickets } from '../types'
 
 export const renderColumn = (tasks: JIRATickets) => (column: string) => {
-        const tickets = tasks.get(column)
+        let tickets = tasks.get(column)
+        tickets = tickets?.filter((t) => !t.disable)
         if (!tickets) return ''
         const _ticket = reduce(tickets, renderTicket, '\n        ')
         return `

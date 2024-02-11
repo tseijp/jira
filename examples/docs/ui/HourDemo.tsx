@@ -12,7 +12,7 @@ export interface HourDemoProps {
 export const HourDemo = (props: HourDemoProps) => {
         const { children, labels } = props
 
-        const ref = useJIRAHour({ label: labels?.[0] })
+        const ref = useJIRAHour()
 
         return (
                 <DemoContainer style={{ display: 'flex' }}>

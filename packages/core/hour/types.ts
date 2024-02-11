@@ -34,16 +34,19 @@ export interface JIRAHour {
         label?: string
         detail?: string
         // calculated
+        disable?: boolean
         duration?: number
 }
 
 export type JIRADateHour = JIRAHour[] & {
         first?: JIRAHour
         last?: JIRAHour
+
         // calculated
-        duration?: number
-        total?: number
+        size?: number
         rest?: number
+        total?: number
+        duration?: number
 }
 
 export type JIRAHours<Key extends string = string> = Map<Key, JIRADateHour>

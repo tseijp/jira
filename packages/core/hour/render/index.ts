@@ -1,9 +1,9 @@
 import { renderColumn } from './renderColumn'
 import { renderTitle } from './renderTitle'
 import { reduce } from '../../utils'
-import { JIRAHours } from '../types'
+import { JIRAHourState } from '../types'
 
-export const render = (columns: string[], tickets: JIRAHours) => {
+export const render = (columns: string[], state: JIRAHourState) => {
         return `
 <table id="jira_root">
   <tbody>
@@ -15,7 +15,7 @@ export const render = (columns: string[], tickets: JIRAHours) => {
     </tr>
     <tr align="center" valign="top">${reduce(
             columns,
-            renderColumn(tickets),
+            renderColumn(state),
             '\n      '
     )}
     </tr>

@@ -13,7 +13,7 @@ export interface BoardDemoProps {
 export const BoardDemo = (props: BoardDemoProps) => {
         const { children, labels } = props
 
-        const ref = useJIRABoard({ label: labels?.[0] })
+        const ref = useJIRABoard()
 
         return (
                 <DemoContainer style={{ display: 'flex' }}>
@@ -24,7 +24,7 @@ export const BoardDemo = (props: BoardDemoProps) => {
                         <DemoTarget ref={ref}>{children}</DemoTarget>
                         <DemoCopyButton onClick={ref.onClick} />
                         {labels && (
-                                <DemoSelectButton onClick={ref.onSelect}>
+                                <DemoSelectButton onChange={ref.onSelect}>
                                         {labels.map((label, index) => (
                                                 <option
                                                         key={index}
