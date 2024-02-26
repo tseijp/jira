@@ -1,29 +1,24 @@
 import createJIRABoard from '@tsei/jira'
 import Textarea from '../../../islands/Textarea'
+import { createRoute } from 'honox/factory'
+import { findHourById } from '../../../database'
 
 export const title = 'Board'
 
-export default function Page() {
+export default createRoute(async (c) => {
+        const { id } = c.req.param()
+        // @ts-ignore
+        const article = await findHourById(c.env.DB, id)
         const jira = createJIRABoard()
-        jira.markdown = `
-# Todo
-- [x] Task 0 #aaa
-        - Detail 0
-# In Progress
-- [x] Task 1 #fff
-        - Detail 1
-# Review
-- [x] Task 2 #aaa
-        - Detail 2
-# Done
-- [x] Task 3 #fff
-        - Detail 3
-`.trim()
 
+        if (!article) return c.render(<div>NOT FOUND</div>)
+
+        jira.markdown = article.content?.trim?.() || ''
         jira.convert(jira)
 
-        return (
+        return c.render(
                 <>
+                        <h1>{article.title}</h1>
                         <div
                                 dangerouslySetInnerHTML={{
                                         __html: jira.result,
@@ -32,4 +27,4 @@ export default function Page() {
                         <Textarea initialValue={jira.markdown} />
                 </>
         )
-}
+})

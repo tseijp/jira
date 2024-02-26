@@ -2280,6 +2280,11 @@
     miniflare "^3.20231218.2"
     minimatch "^9.0.3"
 
+"@hono/zod-validator@0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@hono/zod-validator/-/zod-validator-0.1.11.tgz#7d3e900f01d4c7be6a8c7a7ea1986caaffef423b"
+  integrity sha512-PQXeHUP0+36qpRt8yfeD7N2jbK3ETlGvSN6dMof/HwUC/APRokQRjpXZm4rrlG71Ft0aWE01+Bm4XejqPie5Uw==
+
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
   resolved "https://registry.npmjs.org/@isaacs/cliui/-/cliui-8.0.2.tgz"

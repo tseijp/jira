@@ -6,7 +6,13 @@
                 "dev": "vite",
                 "build": "vite build --mode client && vite build",
                 "preview": "wrangler pages dev ./dist",
-                "deploy": "$npm_execpath run build && wrangler pages deploy ./dist"
+                "deploy": "$npm_execpath run build && wrangler pages deploy ./dist",
+                "setup": "npm run setup0 && npm run setup1",
+                "setup0": "wrangler d1 create jira-examples-hono",
+                "setup1": "wrangler d1 execute jira-examples-hono --local --file=./hour.sql",
+                "setup2": "npx wrangler d1 execute jira-examples-hono --local --command='SELECT * FROM Hour'",
+                "setup3": "wrangler d1 execute jira-examples-hono --file=./hour.sql",
+                "setup4": "npx wrangler d1 execute jira-examples-hono --command='SELECT * FROM Hour'"
         },
         "private": true,
         "dependencies": {
@@ -19,6 +25,7 @@
         "devDependencies": {
                 "@cloudflare/workers-types": "^4.20240208.0",
                 "@hono/vite-cloudflare-pages": "^0.2.4",
+                "@hono/zod-validator": "0.1.11",
                 "reev": "0.12.0",
                 "vite": "^5.0.12",
                 "wrangler": "^3.27.0"
