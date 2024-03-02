@@ -20,6 +20,9 @@ export interface JIRAHourState<Key extends string = string>
                 JIRABoardSharedConfig {
         hours: JIRAHours
         columns: Set<Key>
+        rest: number
+        total: number
+        duration: number
 }
 
 export type JIRAHourConfigArgs = JIRAConfigArgs<

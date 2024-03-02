@@ -23,6 +23,11 @@ export default defineConfig(async ({ mode }) => {
         const { env, dispose } = await getPlatformProxy()
 
         return {
+                server: {
+                        watch: {
+                                ignored: [/\.wrangler/, /\.mf/],
+                        },
+                },
                 plugins: [
                         honox({
                                 devServer: {

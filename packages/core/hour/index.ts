@@ -44,6 +44,14 @@ const calculateRest = (column: string, state: JIRAHourState) => {
         d.rest = d.duration - d.total
 }
 
+const calculateTotalRest = (column: string, state: JIRAHourState) => {
+        const hour = state.hours.get(column)
+        if (!hour) return
+        state.rest += hour.rest || 0
+        state.total += hour.total || 0
+        state.duration += hour.duration || 0
+}
+
 export const convertTextToHourHtml = (state: JIRAHourState) => {
         const markdown = state.markdown
         const hours = (state.hours = new Map())
@@ -111,6 +119,9 @@ export const convertTextToHourHtml = (state: JIRAHourState) => {
         _columns.forEach((col) => calculateRest(col, state)) // calculate duration and rest
         _columns = _columns.sort((a, b) => (a < b ? -1 : 1)) // sort columns by date
         _columns = _columns.filter((col) => hours.get(col)?.size) // remove empty columns
+
+        state.rest = state.duration = state.total = 0
+        _columns.forEach((col) => calculateTotalRest(col, state))
 
         // render
         results.push((state.result = render(_columns, state)))
