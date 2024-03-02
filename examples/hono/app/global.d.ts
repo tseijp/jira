@@ -1,4 +1,11 @@
-import {} from 'hono'
+// global.d.ts
+import '@hono/react-renderer'
+
+declare module '@hono/react-renderer' {
+        interface Props {
+                title?: string
+        }
+}
 
 type Head = {
         title?: string

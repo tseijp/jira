@@ -23,6 +23,9 @@ export default defineConfig(async ({ mode }) => {
         const { env, dispose } = await getPlatformProxy()
 
         return {
+                ssr: {
+                        external: ['react', 'react-dom'],
+                },
                 server: {
                         watch: {
                                 ignored: [/\.wrangler/, /\.mf/],

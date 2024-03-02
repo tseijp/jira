@@ -17,6 +17,7 @@ export interface JIRAConfig extends JIRASharedConfig {
 export interface JIRAState extends JIRASharedConfig {
         // ref
         (e?: Event | Element): void
+        update(markdown?: string): void
         convert<T extends JIRAState>(state: T): void
         markdown: string
         results: string[]

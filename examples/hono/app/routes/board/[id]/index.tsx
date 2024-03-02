@@ -1,41 +1,35 @@
-import createJIRABoard from '@tsei/jira'
-import Textarea from '../../../islands/Textarea'
 import { createRoute } from 'honox/factory'
-import { findHourById } from '../../../database'
 import { basicAuth } from 'hono/basic-auth'
-
-export const title = 'Board'
+import { Context } from 'hono'
+import { findHourById } from '../../../database'
+import BoardForm from '../../../islands/BoardForm'
+import BoardHeader from '../../../islands/atoms/BoardHeader'
+import BoardContainer from '../../../islands/atoms/BoardContainer'
 
 const AUTH = basicAuth({
         username: 'username',
         password: 'password',
 })
 
-export default createRoute(AUTH, async (c) => {
+// tmp
+export const GET = createRoute(AUTH, async (c: Context) => {
         const { id } = c.req.param()
+        const hour = await findHourById(c.env.DB, id)
+
         // @ts-ignore
-        const article = await findHourById(c.env.DB, id)
-        const jira = createJIRABoard()
-
-        if (!article) return c.render(<div>NOT FOUND</div>)
-
-        jira.markdown = article.content?.trim?.() || ''
-        jira.convert(jira)
+        // const hours = await findAllHours(c.env.DB)
 
         return c.render(
-                <>
-                        <h1>{article.title}</h1>
-                        <div
-                                dangerouslySetInnerHTML={{
-                                        __html: jira.result,
-                                }}
-                        />
-                        <Textarea initialValue={jira.markdown} />
-                </>
+                <BoardContainer>
+                        <BoardHeader>{hour?.title}</BoardHeader>
+                        <BoardForm initialValue={hour?.content} />
+                </BoardContainer>,
+                {
+                        title: 'Hour',
+                }
         )
 })
 
-// update
 export const POST = createRoute(async (c) => {
         // @ts-ignore
         const { title, content } = c.req.valid('form')

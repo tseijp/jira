@@ -1,5 +1,5 @@
 import { JIRAConfig, JIRAState } from './types'
-import { getElement, writeClipboard, parseConfig, isE } from './utils'
+import { getElement, writeClipboard, parseConfig, isE, isS } from './utils'
 
 export const create = <
         T extends JIRAState = JIRAState,
@@ -9,7 +9,8 @@ export const create = <
         defaultConfig: Partial<C>,
         ...args: Arg[]
 ) => {
-        const update = () => {
+        const update = (markdown?: string) => {
+                if (isS(markdown)) state.markdown = markdown
                 state.convert(state)
                 if (isE(state.target)) state.target.innerHTML = state.result
         }
@@ -18,10 +19,7 @@ export const create = <
                 state.target = getElement(config.target) || el
                 if (!isE(state.target)) return
                 const markdown = state.target.innerHTML
-                if (markdown) {
-                        state.markdown = markdown
-                        update()
-                }
+                if (markdown) update(markdown)
 
                 state.button = getElement(config.button)!
                 state.select = getElement(config.select)!
@@ -51,8 +49,7 @@ export const create = <
         const onChange = (e: any) => {
                 const markdown = e.target.value
                 if (!markdown || markdown === state.markdown) return
-                state.markdown = markdown
-                update()
+                update(markdown)
         }
 
         const onSelect = (e: any) => {
@@ -75,6 +72,7 @@ export const create = <
         Object.assign(state, {
                 ...config,
                 ref,
+                update,
                 onMount,
                 onClean,
                 onClick,
